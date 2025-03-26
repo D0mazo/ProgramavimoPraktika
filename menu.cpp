@@ -1,8 +1,8 @@
 #include <iostream>
-#include "menu.h"  // Include the header, not cpp
+#include "menu.h"  // Include the header
 using namespace std;
 
-int menu() {
+MenuChoices menu() {
     int playerChoice, difficultyChoice;
     bool validInput = false;
 
@@ -13,7 +13,6 @@ int menu() {
         cout << "2) Mage\n";
         cout << "3) Archer\n";
         cout << "Enter your choice (1-3): ";
-
         cin >> playerChoice;
 
         if (playerChoice >= 1 && playerChoice <= 3) {
@@ -34,7 +33,6 @@ int menu() {
         cout << "2) Medium\n";
         cout << "3) Hard\n";
         cout << "Enter your choice (1-3): ";
-
         cin >> difficultyChoice;
 
         if (difficultyChoice >= 1 && difficultyChoice <= 3) {
@@ -53,7 +51,6 @@ int menu() {
         case 2: cout << "Mage"; break;
         case 3: cout << "Archer"; break;
     }
-
     cout << "\nDifficulty: ";
     switch (difficultyChoice) {
         case 1: cout << "Easy"; break;
@@ -62,5 +59,6 @@ int menu() {
     }
     cout << "\n";
 
-    return 0;
+    // Return both choices in a struct
+    return {playerChoice, difficultyChoice};
 }

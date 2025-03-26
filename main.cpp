@@ -1,7 +1,16 @@
 #include <iostream>
-#include "menu.h"  // Include header, not cpp
+#include "menu.h"
+#include "player.h"
+using namespace std;
 
 int main() {
- menu();
- return 0;  // Added semicolon
+ MenuChoices choices = menu();
+ Player player(choices.playerType);
+
+ cout << "Player Stats:\n";
+ cout << "Health: " << player.getHealth() << endl;
+ cout << "Power: " << player.getPower() << endl;
+ cout << "Stamina: " << player.getStamina() << endl;
+
+ return 0;
 }
