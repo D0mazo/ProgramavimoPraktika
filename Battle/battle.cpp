@@ -2,7 +2,7 @@
 #include <cstdlib>  // For rand()
 #include <ctime>    // For seeding random generator
 #include "C:/Users/Domin/CLionProjects/untitled3/Player/player.h"
-#include "C:/Users/Domin/CLionProjects/untitled3/Monster/monster.h"
+#include "C:/Users/Domin/CLionProjects/untitled3/Monsters/monster.h"
 
 
 void battle(Player &player) {
