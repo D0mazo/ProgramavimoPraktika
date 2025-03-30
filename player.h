@@ -1,17 +1,22 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <cstdlib> // For rand()
+#include <ctime>   // For seeding random generator
+
 class Player {
 private:
     int type;      // 1 = Warrior, 2 = Mage, 3 = Archer
     int health;
-    int power;
+    int power;     // Max attack damage
     int stamina;
-    int gold;       // 💰 New: Player's gold
+    int gold;      // 💰 Player's gold
 
 public:
     // Constructor with default gold
     Player(int playerType, int initialHealth = 100, int initialPower = 10, int initialStamina = 50, int initialGold = 100) {
+        std::srand(std::time(0)); // Seed random number generator
+
         type = playerType;
         health = initialHealth;
         power = initialPower;
@@ -20,21 +25,21 @@ public:
 
         // Adjust attributes based on type
         switch (type) {
-            case 1: // Warrior
+            case 1: // Warrior: High health, decent attack, moderate stamina
                 health = 150;
-            power = 15;
-            stamina = 40;
-            break;
-            case 2: // Mage
+                power = 15;
+                stamina = 40;
+                break;
+            case 2: // Mage: Low health, high attack, low stamina
                 health = 80;
-            power = 20;
-            stamina = 30;
-            break;
-            case 3: // Archer
+                power = 20;
+                stamina = 30;
+                break;
+            case 3: // Archer: Balanced stats, good stamina
                 health = 100;
-            power = 12;
-            stamina = 60;
-            break;
+                power = 12;
+                stamina = 60;
+                break;
             default:
                 break;
         }
@@ -74,6 +79,11 @@ public:
             return true;
         }
         return false; // Not enough gold
+    }
+
+    // ⚔️ Attack function: Random damage between 0 and power
+    int attack() {
+        return rand() % (power + 1); // Random number between 0 and power
     }
 };
 

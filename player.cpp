@@ -1,7 +1,11 @@
 #include "player.h"
+#include <cstdlib> // For rand()
+#include <ctime>   // For seeding random generator
 
 // Constructor
 Player::Player(int playerType, int initialHealth, int initialPower, int initialStamina, int initialGold) {
+    std::srand(std::time(0)); // Seed the random number generator once
+
     type = playerType;
     gold = initialGold;
 
@@ -67,4 +71,9 @@ bool Player::spendGold(int amount) {
         return true;
     }
     return false;
+}
+
+// ⚔️ Attack method: Random damage between 0 and max power
+int Player::attack() {
+    return rand() % (power + 1); // Random damage from 0 to power
 }
