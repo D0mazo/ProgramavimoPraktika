@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: untitled3
+# Project: Project
 # Configurations: Debug
 # =============================================================================
 
@@ -49,15 +49,38 @@ cmake_ninja_workdir = C$:/Users/Domin/CLionProjects/untitled3/cmake-build-debug/
 
 build cmake_object_order_depends_target_untitled3: phony || .
 
-build CMakeFiles/untitled3.dir/main.cpp.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/main.cpp || cmake_object_order_depends_target_untitled3
-  DEP_FILE = CMakeFiles\untitled3.dir\main.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+build CMakeFiles/untitled3.dir/main.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/main.cpp || cmake_object_order_depends_target_untitled3
+  DEP_FILE = CMakeFiles\untitled3.dir\main.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Domin/CLionProjects/untitled3/Player -IC:/Users/Domin/CLionProjects/untitled3/Monsters -IC:/Users/Domin/CLionProjects/untitled3/Battle
   OBJECT_DIR = CMakeFiles\untitled3.dir
   OBJECT_FILE_DIR = CMakeFiles\untitled3.dir
 
-build CMakeFiles/untitled3.dir/menu.cpp.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/menu.cpp || cmake_object_order_depends_target_untitled3
-  DEP_FILE = CMakeFiles\untitled3.dir\menu.cpp.obj.d
-  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+build CMakeFiles/untitled3.dir/Player/player.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/Player/player.cpp || cmake_object_order_depends_target_untitled3
+  DEP_FILE = CMakeFiles\untitled3.dir\Player\player.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Domin/CLionProjects/untitled3/Player -IC:/Users/Domin/CLionProjects/untitled3/Monsters -IC:/Users/Domin/CLionProjects/untitled3/Battle
+  OBJECT_DIR = CMakeFiles\untitled3.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled3.dir\Player
+
+build CMakeFiles/untitled3.dir/Monsters/monster.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/Monsters/monster.cpp || cmake_object_order_depends_target_untitled3
+  DEP_FILE = CMakeFiles\untitled3.dir\Monsters\monster.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Domin/CLionProjects/untitled3/Player -IC:/Users/Domin/CLionProjects/untitled3/Monsters -IC:/Users/Domin/CLionProjects/untitled3/Battle
+  OBJECT_DIR = CMakeFiles\untitled3.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled3.dir\Monsters
+
+build CMakeFiles/untitled3.dir/Battle/battle.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/Battle/battle.cpp || cmake_object_order_depends_target_untitled3
+  DEP_FILE = CMakeFiles\untitled3.dir\Battle\battle.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Domin/CLionProjects/untitled3/Player -IC:/Users/Domin/CLionProjects/untitled3/Monsters -IC:/Users/Domin/CLionProjects/untitled3/Battle
+  OBJECT_DIR = CMakeFiles\untitled3.dir
+  OBJECT_FILE_DIR = CMakeFiles\untitled3.dir\Battle
+
+build CMakeFiles/untitled3.dir/menu.obj: CXX_COMPILER__untitled3_unscanned_Debug C$:/Users/Domin/CLionProjects/untitled3/menu.cpp || cmake_object_order_depends_target_untitled3
+  DEP_FILE = CMakeFiles\untitled3.dir\menu.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Domin/CLionProjects/untitled3/Player -IC:/Users/Domin/CLionProjects/untitled3/Monsters -IC:/Users/Domin/CLionProjects/untitled3/Battle
   OBJECT_DIR = CMakeFiles\untitled3.dir
   OBJECT_FILE_DIR = CMakeFiles\untitled3.dir
 
@@ -69,7 +92,7 @@ build CMakeFiles/untitled3.dir/menu.cpp.obj: CXX_COMPILER__untitled3_unscanned_D
 #############################################
 # Link the executable untitled3.exe
 
-build untitled3.exe: CXX_EXECUTABLE_LINKER__untitled3_Debug CMakeFiles/untitled3.dir/main.cpp.obj CMakeFiles/untitled3.dir/menu.cpp.obj
+build untitled3.exe: CXX_EXECUTABLE_LINKER__untitled3_Debug CMakeFiles/untitled3.dir/main.obj CMakeFiles/untitled3.dir/Player/player.obj CMakeFiles/untitled3.dir/Monsters/monster.obj CMakeFiles/untitled3.dir/Battle/battle.obj CMakeFiles/untitled3.dir/menu.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\untitled3.dir
@@ -116,6 +139,11 @@ build untitled3: phony untitled3.exe
 # Folder: C:/Users/Domin/CLionProjects/untitled3/cmake-build-debug
 
 build all: phony untitled3.exe
+
+# =============================================================================
+# Unknown Build Time Dependencies.
+# Tell Ninja that they may appear as side effects of build rules
+# otherwise ordered by order-only dependencies.
 
 # =============================================================================
 # Built-in targets

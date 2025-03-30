@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cstdlib>  // For rand()
 #include <ctime>    // For seeding random generator
-#include "player.h"
-#include "monster.h"
+#include "C:/Users/Domin/CLionProjects/untitled3/Player/player.h"
+#include "C:/Users/Domin/CLionProjects/untitled3/Monster/monster.h"
+
 
 void battle(Player &player) {
     // Seed RNG

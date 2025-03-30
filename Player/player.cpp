@@ -12,24 +12,24 @@ Player::Player(int playerType, int initialHealth, int initialPower, int initialS
     switch (type) {
         case 1: // Warrior
             health = 150;
-            power = 15;
-            stamina = 40;
-            break;
+        power = 15;
+        stamina = 40;
+        break;
         case 2: // Mage
             health = 80;
-            power = 20;
-            stamina = 30;
-            break;
+        power = 20;
+        stamina = 30;
+        break;
         case 3: // Archer
             health = 100;
-            power = 12;
-            stamina = 60;
-            break;
+        power = 12;
+        stamina = 60;
+        break;
         default:
             health = initialHealth;
-            power = initialPower;
-            stamina = initialStamina;
-            break;
+        power = initialPower;
+        stamina = initialStamina;
+        break;
     }
 }
 
@@ -38,7 +38,7 @@ int Player::getType() const { return type; }
 int Player::getHealth() const { return health; }
 int Player::getPower() const { return power; }
 int Player::getStamina() const { return stamina; }
-int Player::getGold() const { return gold; }   // 🪙
+int Player::getGold() const { return gold; }
 
 // Modifiers
 void Player::takeDamage(int amount) {
@@ -60,7 +60,7 @@ void Player::restoreStamina(int amount) {
     if (stamina > 100) stamina = 100;
 }
 
-// 🪙 Gold methods
+// Gold methods
 void Player::addGold(int amount) {
     gold += amount;
 }
@@ -73,7 +73,7 @@ bool Player::spendGold(int amount) {
     return false;
 }
 
-// ⚔️ Attack method: Random damage between 0 and max power
+// Attack method: Random damage between 0 and max power
 int Player::attack() {
     return rand() % (power + 1); // Random damage from 0 to power
 }

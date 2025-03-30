@@ -1,7 +1,7 @@
 #include <iostream>
 #include "menu.h"
-#include "player.h"
-#include "battle.h"  // Include the battle system
+#include "Player/player.h"
+#include "Battle/battle.h"  // Include the battle system
 
 using namespace std;
 
