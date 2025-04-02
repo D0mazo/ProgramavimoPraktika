@@ -1,21 +1,19 @@
 #include "monster.h"
-#include <cstdlib> // For rand()
-#include <ctime>   // For seeding random generator
 
-// Constructor (Reordered for clarity)
+// Constructor with initialization list
 Monster::Monster(std::string monsterName, int monsterHealth, int monsterPower, int monsterSpeed)
-    : name   (monsterName),
-      health (monsterHealth),
-      power  (monsterPower),
-      speed  (monsterSpeed)
+    : name(monsterName),
+      health(monsterHealth),
+      power(monsterPower),
+      speed(monsterSpeed)
 {
-    std::srand(std::time(0)); // Seed the random number generator once
+    // No need for seeding here - handled by static rng initialization
 }
 
 // Getters
-int Monster::getHealth() const   { return health; }
-int Monster::getPower() const    { return power; }
-int Monster::getSpeed() const    { return speed; }
+int Monster::getHealth() const { return health; }
+int Monster::getPower() const { return power; }
+int Monster::getSpeed() const { return speed; }
 std::string Monster::getName() const { return name; }
 
 // Modifiers
@@ -26,5 +24,11 @@ void Monster::takeDamage(int amount) {
 
 // ⚔️ Attack function: Random damage between 0 and power
 int Monster::attack() {
-    return rand() % (power + 1); // Random damage from 0 to power
+    std::uniform_int_distribution<int> dist(0, power);
+    return dist(rng); // Use static rng
+}
+
+// Utility method
+bool Monster::isAlive() const {
+    return health > 0;
 }
