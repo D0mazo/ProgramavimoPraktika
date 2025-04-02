@@ -5,6 +5,9 @@ using namespace std;
 MenuChoices menu() {
     int playerChoice, difficultyChoice;
     bool validInput = false;
+    // Prompt the player for their hero name
+    std::cout << "Enter your hero name: ";
+    std::getline(std::cin, choices.playerName); // Store the name in the struct
 
     // Player type menu
     do {

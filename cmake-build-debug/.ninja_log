@@ -1,14 +1,12 @@
 # ninja log v6
 167	1023	7650614469794214	CMakeFiles/untitled3.dir/main.cpp.obj	1377fbd4e8c02a40
-740	1331	7647186066131446	untitled3.exe	9aedd24935238e98
-5	506	7650628469546348	build.ninja	f4f07157cc3705c
+833	1421	7650633203618244	untitled3.exe	66b33aacc9be249b
+3	457	7653173217504773	build.ninja	f4f07157cc3705c
 83	434	7650626930011599	CMakeFiles/untitled3.dir/Player/player.cpp.obj	36ea337dbc3edd2b
 76	861	7650626929931657	CMakeFiles/untitled3.dir/menu.cpp.obj	6f5f83645ce379f9
 93	716	7650626930101607	CMakeFiles/untitled3.dir/Monsters/monster.cpp.obj	cbd931ba24ad20e7
-3	457	7650628469546348	build.ninja	f4f07157cc3705c
-61	294	7650628471627730	CMakeFiles/untitled3.dir/Player/player.obj	93a9e31347766bb9
 70	912	7650628471727755	CMakeFiles/untitled3.dir/Monsters/monster.obj	78f524fa03f84892
+61	294	7650628471627730	CMakeFiles/untitled3.dir/Player/player.obj	93a9e31347766bb9
 90	1053	7650628471927766	CMakeFiles/untitled3.dir/menu.obj	b197feee2e80989d
 20	976	7650631580493546	CMakeFiles/untitled3.dir/Battle/battle.obj	16ee1be83cded15a
 9	831	7650633195384015	CMakeFiles/untitled3.dir/main.obj	2e5ab313ec36383c
-833	1421	7650633203618244	untitled3.exe	66b33aacc9be249b
