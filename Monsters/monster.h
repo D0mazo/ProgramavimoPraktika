@@ -3,6 +3,7 @@
 
 #include <string>
 #include <random>
+#include <ctime>
 
 class Monster {
 private:
@@ -37,7 +38,7 @@ public:
     bool isAlive() const;
 };
 
-// Define static member
-std::mt19937 Monster::rng{static_cast<unsigned>(std::time(nullptr))};
+// Declare static member
+extern std::mt19937 Monster::rng;
 
 #endif // MONSTER_H

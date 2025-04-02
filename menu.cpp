@@ -5,6 +5,8 @@ using namespace std;
 MenuChoices menu() {
     int playerChoice, difficultyChoice;
     bool validInput = false;
+    MenuChoices choices;  // Create an instance of the struct
+
     // Prompt the player for their hero name
     std::cout << "Enter your hero name: ";
     std::getline(std::cin, choices.playerName); // Store the name in the struct
@@ -62,6 +64,8 @@ MenuChoices menu() {
     }
     cout << "\n";
 
-    // Return both choices in a struct
-    return {playerChoice, difficultyChoice};
+    // Assign values to the struct and return it
+    choices.playerType = playerChoice;
+    choices.difficulty = difficultyChoice;
+    return choices;
 }
