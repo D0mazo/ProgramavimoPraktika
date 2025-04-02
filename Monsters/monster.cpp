@@ -1,5 +1,6 @@
 #include "monster.h"
 
+// Define and initialize static member
 std::mt19937 Monster::rng{static_cast<unsigned>(std::time(nullptr))};
 
 Monster::Monster(std::string monsterName, int monsterHealth, int monsterPower, int monsterSpeed)

@@ -11,7 +11,7 @@ private:
     int power;         // Maximum attack strength
     int speed;         // Speed (could be used for initiative or evasion)
     std::string name;  // Monster's name
-    static std::mt19937 rng;  // Static random number generator
+    static std::mt19937 rng;  // Static random number generator (declaration only)
 
 public:
     // Constructor with default parameters
@@ -38,7 +38,7 @@ public:
     bool isAlive() const;
 };
 
-// Declare static member
+// Declare static member (no initialization here)
 extern std::mt19937 Monster::rng;
 
 #endif // MONSTER_H
