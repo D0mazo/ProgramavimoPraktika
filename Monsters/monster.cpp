@@ -1,7 +1,6 @@
 #include "monster.h"
 
-// Define and initialize static member
-std::mt19937 Monster::rng{static_cast<unsigned>(std::time(nullptr))};
+
 
 Monster::Monster(std::string monsterName, int monsterHealth, int monsterPower, int monsterSpeed)
     : name(monsterName),
@@ -26,8 +25,7 @@ void Monster::takeDamage(int amount) {
 }
 
 int Monster::attack() {
-    std::uniform_int_distribution<int> damageDist(0, power);
-    return damageDist(rng);
+    return power; // Simply return the monster's power as the attack value
 }
 
 bool Monster::isAlive() const {
