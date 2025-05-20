@@ -1,6 +1,5 @@
 #ifndef SHOP_H
 #define SHOP_H
-
 #include "player.h"
 #include "inventory.h"
 #include <string>

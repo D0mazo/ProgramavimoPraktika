@@ -60,6 +60,11 @@ void Player::restoreStamina(int amount) {
     if (stamina > 100) stamina = 100;
 }
 
+void Player::restoreHealth(int amount) {
+    health += amount;
+    if (health > 150) health = 150; // Cap health at 150 (adjustable)
+}
+
 // Gold methods
 void Player::addGold(int amount) {
     gold += amount;
