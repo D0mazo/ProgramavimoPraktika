@@ -3,13 +3,22 @@
 #include <ctime>    // For seeding random generator
 #include "C:/Users/Domin/CLionProjects/untitled3/Player/player.h"
 #include "C:/Users/Domin/CLionProjects/untitled3/Monsters/monster.h"
+#include "C:/Users/Domin/CLionProjects/untitled3/Monsters/monster_data.h"
 
 void battle(Player &player) {
     // Seed RNG
     std::srand(std::time(0));
 
-    // Generate a random monster
-    Monster monster("Goblin", 50 + (rand() % 51), 5 + (rand() % 11), 5);  // Random health 50-100, power 5-15
+    // List of available monster names
+    std::string monsterNames[] = {
+        "Goblin", "Orc", "Skeleton", "Troll", "Wraith",
+        "Dragon", "Slime", "Harpy", "Minotaur", "Spider"
+    };
+    int numMonsters = 10; // Number of defined monsters
+    std::string selectedMonster = monsterNames[rand() % numMonsters];
+
+    // Generate a random monster using createMonster
+    Monster monster = createMonster(selectedMonster);
 
     std::cout << "A wild " << monster.getName() << " appears!\n";
     std::cout << "Health: " << monster.getHealth() << " | Power: " << monster.getPower() << "\n\n";

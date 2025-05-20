@@ -53,4 +53,3 @@ Monster createMonster(const std::string& monsterName) {
 
 #endif // MONSTER_DATA_H
 
-#endif // MONSTER_DATA_H

@@ -11,7 +11,7 @@ private:
     int power;         // Maximum attack strength
     int speed;         // Speed (could be used for initiative or evasion)
     std::string name;  // Monster's name
-
+    static std::mt19937 rng; // Static random number generator
 
 public:
     // Constructor with default parameters
@@ -31,13 +31,14 @@ public:
     // Modifiers
     void takeDamage(int amount);
 
-    // ⚔️ Attack function: Random damage between 0 and max power
+    // Attack function: Random damage between 0 and power (inclusive)
     int attack();
 
     // Utility method
     bool isAlive() const;
 };
 
-
+// Static member definition
+inline std::mt19937 Monster::rng(static_cast<unsigned>(std::time(nullptr)));
 
 #endif // MONSTER_H
