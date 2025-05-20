@@ -1,5 +1,8 @@
 #include <iostream>
-#include "menu.h"  // Include the header
+#include <random>
+#include <ctime>
+#include "menu.h"
+#include "monster_data.h"  // Include to access getMonstersByDifficulty
 using namespace std;
 
 MenuChoices menu() {
@@ -7,9 +10,12 @@ MenuChoices menu() {
     bool validInput = false;
     MenuChoices choices;  // Create an instance of the struct
 
+    // Seed the random number generator
+    static mt19937 rng(static_cast<unsigned>(time(nullptr)));
+
     // Prompt the player for their hero name
-    std::cout << "Enter your hero name: ";
-    std::getline(std::cin, choices.playerName); // Store the name in the struct
+    cout << "Enter your hero name: ";
+    getline(cin, choices.playerName); // Store the name in the struct
 
     // Player type menu
     do {
@@ -49,7 +55,16 @@ MenuChoices menu() {
         }
     } while (!validInput);
 
+    // Get the list of monsters for the chosen difficulty
+    vector<string> validMonsters = getMonstersByDifficulty(difficultyChoice);
+
+    // Randomly select a monster from the valid monsters
+    uniform_int_distribution<int> dist(0, validMonsters.size() - 1);
+    choices.monsterName = validMonsters[dist(rng)];
+
+    // Display selections
     cout << "\nYour Selections:\n";
+    cout << "Hero Name: " << choices.playerName << "\n";
     cout << "Player Type: ";
     switch (playerChoice) {
         case 1: cout << "Warrior"; break;
@@ -62,7 +77,7 @@ MenuChoices menu() {
         case 2: cout << "Medium"; break;
         case 3: cout << "Hard"; break;
     }
-    cout << "\n";
+    cout << "\nOpponent: " << choices.monsterName << "\n";
 
     // Assign values to the struct and return it
     choices.playerType = playerChoice;

@@ -1,6 +1,6 @@
 #include "monster.h"
 
-
+std::mt19937 Monster::rng{static_cast<unsigned>(std::time(nullptr))}; // Initialize static rng
 
 Monster::Monster(std::string monsterName, int monsterHealth, int monsterPower, int monsterSpeed)
     : name(monsterName),
@@ -25,7 +25,8 @@ void Monster::takeDamage(int amount) {
 }
 
 int Monster::attack() {
-    return power; // Simply return the monster's power as the attack value
+    std::uniform_int_distribution<int> dist(0, power); // Random value between 0 and power (inclusive)
+    return dist(rng); // Return random attack value
 }
 
 bool Monster::isAlive() const {

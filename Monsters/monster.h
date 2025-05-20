@@ -38,7 +38,4 @@ public:
     bool isAlive() const;
 };
 
-// Static member definition
-inline std::mt19937 Monster::rng(static_cast<unsigned>(std::time(nullptr)));
-
 #endif // MONSTER_H

@@ -1,85 +1,50 @@
 #include <iostream>
 #include "menu.h"
 #include "Player/player.h"
-#include "Battle/battle.h"
-#include "shop.h"
-#include "inventory.h"
+#include "Battle/battle.h"  // Include the battle system
 
 using namespace std;
 
 int main() {
-    // Show the menu and let the player choose a character
-    MenuChoices choices = menu();
-    Player player(choices.playerType);
-    Inventory inventory; // Create inventory for the player
-    Shop shop; // Create shop instance
+ // Show the menu and let the player choose a character
+ MenuChoices choices = menu();
+ Player player(choices.playerType);
 
-    cout << "Welcome, warrior! Here are your stats:\n";
-    cout << "Health: " << player.getHealth() << endl;
-    cout << "Power: " << player.getPower() << endl;
-    cout << "Stamina: " << player.getStamina() << endl;
-    cout << "Gold: " << player.getGold() << endl;
+ cout << "Welcome, warrior! Here are your stats:\n";
+ cout << "Health: " << player.getHealth() << endl;
+ cout << "Power: " << player.getPower() << endl;
+ cout << "Stamina: " << player.getStamina() << endl;
+ cout << "Gold: " << player.getGold() << " 💰" << endl;
 
-    // Main game loop
-    while (true) {
-        cout << "\n====== MAIN MENU ======\n";
-        cout << "1. Battle\n";
-        cout << "2. View Stats\n";
-        cout << "3. Visit Shop\n";
-        cout << "4. Quit Game\n";
-        cout << "Choose an action: ";
+ // Main game loop
+ while (true) {
+  cout << "\n====== MAIN MENU ======\n";
+  cout << "1. Battle\n";
+  cout << "2. View Stats\n";
+  cout << "3. Quit Game\n";
+  cout << "Choose an action: ";
 
-        int choice;
-        cin >> choice;
+  int choice;
+  cin >> choice;
 
-        if (choice == 1) {
-            battle(player); // Start a fight
-        }
-        else if (choice == 2) {
-            cout << "\nPlayer Stats:\n";
-            cout << "Health: " << player.getHealth() << endl;
-            cout << "Power: " << player.getPower() << endl;
-            cout << "Stamina: " << player.getStamina() << endl;
-            cout << "Gold: " << player.getGold() << endl;
-        }
-        else if (choice == 3) {
-            // Shop menu
-            shop.displayItems();
-            cout << "Your Gold: " << player.getGold() << endl;
-            cout << "Enter the item number to buy (or 0 to exit): ";
+  if (choice == 1) {
+   battle(player);  // Start a fight
+  }
+  else if (choice == 2) {
+   cout << "\n📊 Player Stats:\n";
+   cout << "Health: " << player.getHealth() << endl;
+   cout << "Power: " << player.getPower() << endl;
+   cout << "Stamina: " << player.getStamina() << endl;
+   cout << "Gold: " << player.getGold() << " 💰" << endl;
+  }
+  else if (choice == 3) {
+   cout << "🏆 Thanks for playing! See you next time.\n";
+   break;  // Exit game loop
+  }
+  else {
+   cout << "❌ Invalid choice! Try again.\n";
+  }
+ }
 
-            int itemChoice;
-            cin >> itemChoice;
-
-            if (itemChoice == 0) {
-                cout << "Leaving the shop.\n";
-                continue;
-            }
-
-            // Map item choice to item name
-            string itemName;
-            switch (itemChoice) {
-                case 1: itemName = "Health Potion"; break;
-                case 2: itemName = "Stamina Potion"; break;
-                case 3: itemName = "Power Boost"; break;
-                case 4: itemName = "Sword"; break;
-                case 5: itemName = "Staff"; break;
-                case 6: itemName = "Bow"; break;
-                case 7: itemName = (player.getType() == 1 ? "Battle Cry" :
-                                   player.getType() == 2 ? "Fireball" : "Power Shot"); break;
-                default: cout << "Invalid item number!\n"; continue;
-            }
-
-            shop.buyItem(player, inventory, itemName);
-        }
-        else if (choice == 4) {
-            cout << "Thanks for playing! See you next time.\n";
-            break; // Exit game loop
-        }
-        else {
-            cout << "Invalid choice! Try again.\n";
-        }
-    }
-
-    return 0;
+ return 0;
 }

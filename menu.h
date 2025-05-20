@@ -3,14 +3,13 @@
 
 #include <string>
 
-// Struct to hold menu selections
 struct MenuChoices {
-    int playerType;     // 1 = Warrior, 2 = Mage, 3 = Archer
-    int difficulty;     // 1 = Easy, 2 = Medium, 3 = Hard
-    std::string playerName; // Player's chosen hero name
+    std::string playerName;  // Player's name
+    int playerType;          // Player type (1: Warrior, 2: Mage, 3: Archer)
+    int difficulty;          // Difficulty level (1: Easy, 2: Medium, 3: Hard)
+    std::string monsterName; // Selected monster's name
 };
 
-// Function declaration
-MenuChoices menu();
+MenuChoices menu();  // Function prototype
 
-#endif //MENU_H
+#endif // MENU_H
