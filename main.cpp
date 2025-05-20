@@ -10,7 +10,7 @@ int main() {
  MenuChoices choices = menu();
  Player player(choices.playerType);
 
- cout << "🔥 Welcome, warrior! Here are your stats:\n";
+ cout << "Welcome, warrior! Here are your stats:\n";
  cout << "Health: " << player.getHealth() << endl;
  cout << "Power: " << player.getPower() << endl;
  cout << "Stamina: " << player.getStamina() << endl;
@@ -19,9 +19,9 @@ int main() {
  // Main game loop
  while (true) {
   cout << "\n====== MAIN MENU ======\n";
-  cout << "1. Battle ⚔️\n";
-  cout << "2. View Stats 📊\n";
-  cout << "3. Quit Game ❌\n";
+  cout << "1. Battle\n";
+  cout << "2. View Stats\n";
+  cout << "3. Quit Game\n";
   cout << "Choose an action: ";
 
   int choice;
