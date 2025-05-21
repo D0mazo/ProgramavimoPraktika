@@ -27,12 +27,7 @@ public:
         }
     }
 
-    // Use magic: Increase power based on spell type
-    void useMagic(Player& player, const std::string& spell) {
-        if (spell == "Fireball" || spell == "Power Shot" || spell == "Battle Cry") {
-            player.increasePower(8); // Example: Spells increase power by 8
-        }
-    }
+
 };
 
 #endif // INVENTORY_H

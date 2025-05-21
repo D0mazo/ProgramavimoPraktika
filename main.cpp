@@ -8,17 +8,21 @@
 using namespace std;
 
 int main() {
- // Show the menu and let the player choose a character
- MenuChoices choices = menu();
- Player player(choices.playerType);
+    // Seed RNG once at program start
+    std::srand(std::time(0));
+
+    // Show the menu and let the player choose a character
+    MenuChoices choices = menu();
+    Player player(choices.playerType);
     Inventory inventory; // Create inventory for the player
     Shop shop; // Create shop instance
 
-  cout << "Welcome, warrior! Here are your stats:\n";
+    cout << "Welcome, warrior! Here are your stats:\n";
     cout << "Health: " << player.getHealth() << endl;
     cout << "Power: " << player.getPower() << endl;
     cout << "Stamina: " << player.getStamina() << endl;
     cout << "Gold: " << player.getGold() << endl;
+    cout << "Points: " << player.getPoints() << endl; // Added points display
 
     // Main game loop
     while (true) {
@@ -41,6 +45,7 @@ int main() {
             cout << "Power: " << player.getPower() << endl;
             cout << "Stamina: " << player.getStamina() << endl;
             cout << "Gold: " << player.getGold() << endl;
+            cout << "Points: " << player.getPoints() << endl; // Added points display
         }
         else if (choice == 3) {
             // Shop menu

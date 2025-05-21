@@ -43,8 +43,10 @@ void battle(Player &player) {
             if (monster.getHealth() <= 0) {
                 std::cout << "You defeated the " << monster.getName() << "!\n";
                 int goldReward = 20 + (rand() % 31); // Random gold reward (20-50)
+                int pointReward = 10 + (rand() % 21); // Random point reward (10-30)
                 player.addGold(goldReward);
-                std::cout << "You earned " << goldReward << " gold!\n";
+                player.addPoints(pointReward);
+                std::cout << "You earned " << goldReward << " gold and " << pointReward << " points!\n";
                 break;
             }
 
@@ -71,7 +73,8 @@ void battle(Player &player) {
         }
 
         else if (choice == 3) { // View Stats
-            std::cout << "Player Stats: Health = " << player.getHealth() << ", Power = " << player.getPower() << ", Gold = " << player.getGold() << "\n";
+            std::cout << "Player Stats: Health = " << player.getHealth() << ", Power = " << player.getPower()
+                      << ", Gold = " << player.getGold() << ", Points = " << player.getPoints() << "\n";
             std::cout << "Monster Stats: Health = " << monster.getHealth() << ", Power = " << monster.getPower() << "\n";
         }
 

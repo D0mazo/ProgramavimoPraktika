@@ -77,7 +77,7 @@ MenuChoices menu() {
         case 2: cout << "Medium"; break;
         case 3: cout << "Hard"; break;
     }
-    cout << "\nOpponent: " << choices.monsterName << "\n";
+    cout << "\n";
 
     // Assign values to the struct and return it
     choices.playerType = playerChoice;

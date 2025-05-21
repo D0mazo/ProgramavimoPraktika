@@ -10,7 +10,7 @@ void Shop::displayItems() {
     std::cout << "4. Sword (Warrior) - 50 Gold\n";
     std::cout << "5. Staff (Mage) - 50 Gold\n";
     std::cout << "6. Bow (Archer) - 50 Gold\n";
-    std::cout << "7. Spell: Fireball / Power Shot / Battle Cry - 40 Gold\n";
+
     std::cout << "===============================\n";
 }
 
@@ -48,22 +48,5 @@ void Shop::buyItem(Player& player, Inventory& inventory, const std::string& item
             inventory.equipWeapon(player, "Bow");
         } else std::cout << "Not enough gold.\n";
     }
-    else if (itemName == "Fireball" && player.getType() == 2) {
-        if (player.spendGold(40)) {
-            inventory.useMagic(player, "Fireball");
-        } else std::cout << "Not enough gold.\n";
-    }
-    else if (itemName == "Power Shot" && player.getType() == 3) {
-        if (player.spendGold(40)) {
-            inventory.useMagic(player, "Power Shot");
-        } else std::cout << "Not enough gold.\n";
-    }
-    else if (itemName == "Battle Cry" && player.getType() == 1) {
-        if (player.spendGold(40)) {
-            inventory.useMagic(player, "Battle Cry");
-        } else std::cout << "Not enough gold.\n";
-    }
-    else {
-        std::cout << "Invalid item or incompatible class.\n";
-    }
+
 }

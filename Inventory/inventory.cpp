@@ -45,26 +45,5 @@ void Inventory::equipWeapon(Player& player, const std::string& weaponName) {
     }
 }
 
-// New: Use Magic Spell
-void Inventory::useMagic(Player& player, const std::string& spellName) {
-    if (player.getStamina() < 10) {
-        std::cout << "Not enough stamina to cast magic!\n";
-        return;
-    }
 
-    if (spellName == "Fireball" && player.getType() == 2) {
-        std::cout << "Mage casts Fireball! +15 power\n";
-        player.useStamina(15);
-        player.increasePower(15);
-    } else if (spellName == "Power Shot" && player.getType() == 3) {
-        std::cout << "Archer uses Power Shot! +10 power\n";
-        player.useStamina(10);
-        player.increasePower(10);
-    } else if (spellName == "Battle Cry" && player.getType() == 1) {
-        std::cout << "Warrior uses Battle Cry! +12 power\n";
-        player.useStamina(10);
-        player.increasePower(12);
-    } else {
-        std::cout << "Spell not available for this class or doesn't exist.\n";
-    }
-}
+
