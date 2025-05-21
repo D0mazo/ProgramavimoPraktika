@@ -4,7 +4,7 @@
 #include "C:/Users/Domin/CLionProjects/untitled3/Player/player.h"
 #include "C:/Users/Domin/CLionProjects/untitled3/Monsters/monster.h"
 
-
+bool battle(Player& player, const std::string& monsterName);
 // Function prototype for the battle system
 void battle(Player& player);
 

@@ -2,20 +2,20 @@
 #include <random>
 #include <ctime>
 #include "menu.h"
-#include "monster_data.h"  // Include to access getMonstersByDifficulty
+#include "monster_data.h"
 using namespace std;
 
 MenuChoices menu() {
     int playerChoice, difficultyChoice;
     bool validInput = false;
-    MenuChoices choices;  // Create an instance of the struct
+    MenuChoices choices;
 
     // Seed the random number generator
     static mt19937 rng(static_cast<unsigned>(time(nullptr)));
 
     // Prompt the player for their hero name
     cout << "Enter your hero name: ";
-    getline(cin, choices.playerName); // Store the name in the struct
+    getline(cin, choices.playerName);
 
     // Player type menu
     do {
@@ -54,13 +54,6 @@ MenuChoices menu() {
             cin.ignore(10000, '\n');
         }
     } while (!validInput);
-
-    // Get the list of monsters for the chosen difficulty
-    vector<string> validMonsters = getMonstersByDifficulty(difficultyChoice);
-
-    // Randomly select a monster from the valid monsters
-    uniform_int_distribution<int> dist(0, validMonsters.size() - 1);
-    choices.monsterName = validMonsters[dist(rng)];
 
     // Display selections
     cout << "\nYour Selections:\n";

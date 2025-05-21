@@ -1,27 +1,21 @@
+#include "battle.h"
+#include "monster_data.h"
 #include <iostream>
-#include <cstdlib>  // For rand()
-#include <ctime>    // For seeding random generator
-#include "C:/Users/Domin/CLionProjects/untitled3/Player/player.h"
-#include "C:/Users/Domin/CLionProjects/untitled3/Monsters/monster.h"
-#include "C:/Users/Domin/CLionProjects/untitled3/Monsters/monster_data.h"
+#include <random>
+#include <ctime>
 
-void battle(Player &player) {
-    // Seed RNG
-    std::srand(std::time(0));
-
-    // List of available monster names
-    std::string monsterNames[] = {
-        "Goblin", "Orc", "Skeleton", "Troll", "Wraith",
-        "Dragon", "Slime", "Harpy", "Minotaur", "Spider"
-    };
-    int numMonsters = 10; // Number of defined monsters
-    std::string selectedMonster = monsterNames[rand() % numMonsters];
-
-    // Generate a random monster using createMonster
-    Monster monster = createMonster(selectedMonster);
-
+bool battle(Player& player, const std::string& monsterName) {
+    // Create the monster using the provided monsterName
+    Monster monster = createMonster(monsterName);
     std::cout << "A wild " << monster.getName() << " appears!\n";
     std::cout << "Health: " << monster.getHealth() << " | Power: " << monster.getPower() << "\n\n";
+
+    // Initialize random number generator
+    static std::mt19937 rng(static_cast<unsigned>(std::time(nullptr)));
+    std::uniform_int_distribution<int> damageDist(0, player.getPower()); // Player damage: 0 to power
+    std::uniform_int_distribution<int> runChance(0, 1); // 50% chance to escape
+    std::uniform_int_distribution<int> goldDist(20, 50); // Gold reward: 20-50
+    std::uniform_int_distribution<int> pointDist(10, 30); // Point reward: 10-30
 
     // Battle loop
     while (player.getHealth() > 0 && monster.getHealth() > 0) {
@@ -36,18 +30,18 @@ void battle(Player &player) {
         std::cin >> choice;
 
         if (choice == 1) { // Attack
-            int playerAttack = rand() % (player.getPower() + 1);
+            int playerAttack = damageDist(rng);
             std::cout << "You attack the " << monster.getName() << " for " << playerAttack << " damage!\n";
             monster.takeDamage(playerAttack);
 
             if (monster.getHealth() <= 0) {
                 std::cout << "You defeated the " << monster.getName() << "!\n";
-                int goldReward = 20 + (rand() % 31); // Random gold reward (20-50)
-                int pointReward = 10 + (rand() % 21); // Random point reward (10-30)
+                int goldReward = goldDist(rng);
+                int pointReward = pointDist(rng);
                 player.addGold(goldReward);
                 player.addPoints(pointReward);
                 std::cout << "You earned " << goldReward << " gold and " << pointReward << " points!\n";
-                break;
+                return true; // Player wins
             }
 
             // Monster's turn to attack
@@ -57,34 +51,36 @@ void battle(Player &player) {
 
             if (player.getHealth() <= 0) {
                 std::cout << "You have been defeated...\n";
-                break;
+                return false; // Player loses
             }
         }
-
         else if (choice == 2) { // Run Away
-            if (rand() % 2 == 0) {
+            if (runChance(rng) == 0) {
                 std::cout << "You successfully escaped!\n";
-                break;
+                return false; // Escape counts as a loss for win condition tracking
             } else {
                 std::cout << "Escape failed! The " << monster.getName() << " attacks you!\n";
                 int monsterAttack = monster.attack();
                 player.takeDamage(monsterAttack);
+                if (player.getHealth() <= 0) {
+                    std::cout << "You have been defeated...\n";
+                    return false; // Player loses
+                }
             }
         }
-
         else if (choice == 3) { // View Stats
             std::cout << "Player Stats: Health = " << player.getHealth() << ", Power = " << player.getPower()
                       << ", Gold = " << player.getGold() << ", Points = " << player.getPoints() << "\n";
             std::cout << "Monster Stats: Health = " << monster.getHealth() << ", Power = " << monster.getPower() << "\n";
         }
-
         else if (choice == 4) { // Quit Battle
             std::cout << "You forfeited the battle.\n";
-            break;
+            return false; // Forfeit counts as a loss for win condition tracking
         }
-
         else {
             std::cout << "Invalid choice! Try again.\n";
         }
     }
+
+    return true; // Fallback (should not reach here)
 }
