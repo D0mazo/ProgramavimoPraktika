@@ -1,25 +1,136 @@
 #include <iostream>
 #include <random>
 #include <ctime>
-#include <set> // Added for tracking defeated monsters
+#include <set>
+#include <vector>
+#include <fstream>
+#include <sstream>
 #include "menu.h"
 #include "Player/player.h"
 #include "Battle/battle.h"
 #include "shop.h"
 #include "inventory.h"
-#include "monster_data.h" // Added to access getMonstersByDifficulty
+#include "monster_data.h"
 
 using namespace std;
 
+// Struct to store game session history
+struct GameSession {
+    string playerName;
+    string playerType;
+    string difficulty;
+    string result;
+    string defeatedMonsters;
+};
+
+// Function to convert player type to string
+string getPlayerTypeString(int playerType) {
+    switch (playerType) {
+        case 1: return "Warrior";
+        case 2: return "Mage";
+        case 3: return "Archer";
+        default: return "Unknown";
+    }
+}
+
+// Function to convert difficulty to string
+string getDifficultyString(int difficulty) {
+    switch (difficulty) {
+        case 1: return "Easy";
+        case 2: return "Medium";
+        case 3: return "Hard";
+        default: return "Unknown";
+    }
+}
+
+// Function to join defeated monsters into a string
+string joinMonsters(const set<string>& monsters) {
+    if (monsters.empty()) return "None";
+    string result;
+    for (auto it = monsters.begin(); it != monsters.end(); ++it) {
+        result += *it;
+        if (next(it) != monsters.end()) result += ";";
+    }
+    return result;
+}
+
+// Function to load game history from CSV
+vector<GameSession> loadGameHistory() {
+    vector<GameSession> history;
+    ifstream file("game_history.csv");
+    if (!file.is_open()) return history; // Return empty vector if file doesn't exist
+
+    string line;
+    getline(file, line); // Skip header
+    while (getline(file, line)) {
+        stringstream ss(line);
+        GameSession session;
+        getline(ss, session.playerName, ',');
+        getline(ss, session.playerType, ',');
+        getline(ss, session.difficulty, ',');
+        getline(ss, session.result, ',');
+
+        getline(ss, session.defeatedMonsters, ',');
+        history.push_back(session);
+    }
+    file.close();
+    return history;
+}
+
+// Function to save game session to CSV
+void saveGameSession(const GameSession& session) {
+    ofstream file("game_history.csv", ios::app);
+    if (!file.is_open()) {
+        cout << "Error: Could not open game_history.csv for writing.\n";
+        return;
+    }
+    // Write header if file is empty
+    if (file.tellp() == 0) {
+        file << "PlayerName,PlayerType,Difficulty,Result,DefeatedMonsters\n";
+    }
+    file << session.playerName << ","
+         << session.playerType << ","
+         << session.difficulty << ","
+         << session.result << ","
+         << session.defeatedMonsters << "\n";
+    file.close();
+}
+
+// Function to display game history
+void displayGameHistory(const vector<GameSession>& history) {
+    if (history.empty()) {
+        cout << "No game history available.\n";
+        return;
+    }
+    cout << "\n====== GAME HISTORY ======\n";
+    cout << "Player Name | Player Type | Difficulty | Result | Defeated Monsters\n";
+    cout << "------------|-------------|------------|--------|------------------\n";
+    for (const auto& session : history) {
+        cout << session.playerName << " | "
+             << session.playerType << " | "
+             << session.difficulty << " | "
+             << session.result << " | "
+             << session.defeatedMonsters << "\n";
+    }
+}
+
 int main() {
     // Seed RNG once at program start
-    std::srand(std::time(0));
+    srand(static_cast<unsigned>(time(nullptr)));
+
+    // Load game history
+    vector<GameSession> gameHistory = loadGameHistory();
+    if (!gameHistory.empty()) {
+        cout << "\nPrevious Game Sessions:\n";
+        displayGameHistory(gameHistory);
+        cout << "\n";
+    }
 
     // Show the menu and let the player choose a character
     MenuChoices choices = menu();
     Player player(choices.playerType);
-    Inventory inventory; // Create inventory for the player
-    Shop shop; // Create shop instance
+    Inventory inventory;
+    Shop shop;
 
     // Track defeated monsters
     set<string> defeatedMonsters;
@@ -31,30 +142,42 @@ int main() {
     cout << "Gold: " << player.getGold() << endl;
     cout << "Points: " << player.getPoints() << endl;
 
+    // Initialize game session
+    GameSession currentSession;
+    currentSession.playerName = choices.playerName;
+    currentSession.playerType = getPlayerTypeString(choices.playerType);
+    currentSession.difficulty = getDifficultyString(choices.difficulty);
+    currentSession.result = "Quit"; // Default result
+
     // Main game loop
     while (true) {
-        // Check win condition for Easy mode
-        if (choices.difficulty == 1) { // Easy mode
-            vector<string> easyMonsters = getMonstersByDifficulty(1);
-            bool allDefeated = true;
-            for (const auto& monster : easyMonsters) {
-                if (defeatedMonsters.find(monster) == defeatedMonsters.end()) {
-                    allDefeated = false;
-                    break;
-                }
+        // Check win condition for all difficulty levels
+        vector<string> levelMonsters = getMonstersByDifficulty(choices.difficulty);
+        bool allDefeated = true;
+        for (const auto& monster : levelMonsters) {
+            if (defeatedMonsters.find(monster) == defeatedMonsters.end()) {
+                allDefeated = false;
+                break;
             }
-            if (allDefeated) {
-                cout << "\nCongratulations, " << choices.playerName << "! You have defeated all Easy mode monsters (Goblin, Slime, Skeleton)!\n";
-                cout << "You win the game!\n";
-                break; // Exit game loop
-            }
+        }
+        if (allDefeated) {
+            cout << "\nCongratulations, " << choices.playerName << "! You have defeated all "
+                 << currentSession.difficulty << " mode monsters ("
+                 << joinMonsters(set<string>(levelMonsters.begin(), levelMonsters.end()))
+                 << ")!\n";
+            cout << "You win the game!\n";
+            currentSession.result = "Win";
+            currentSession.defeatedMonsters = joinMonsters(defeatedMonsters);
+            saveGameSession(currentSession);
+            break; // Exit game loop
         }
 
         cout << "\n====== MAIN MENU ======\n";
         cout << "1. Battle\n";
         cout << "2. View Stats\n";
         cout << "3. Visit Shop\n";
-        cout << "4. Quit Game\n";
+        cout << "4. View Game History\n";
+        cout << "5. Quit Game\n";
         cout << "Choose an action: ";
 
         int choice;
@@ -75,6 +198,9 @@ int main() {
                 cout << "You defeated the " << selectedMonster << "!\n";
             } else {
                 cout << "You were defeated by the " << selectedMonster << ". Game Over!\n";
+                currentSession.result = "Loss";
+                currentSession.defeatedMonsters = joinMonsters(defeatedMonsters);
+                saveGameSession(currentSession);
                 break; // Exit game loop on player defeat
             }
         }
@@ -85,7 +211,6 @@ int main() {
             cout << "Stamina: " << player.getStamina() << endl;
             cout << "Gold: " << player.getGold() << endl;
             cout << "Points: " << player.getPoints() << endl;
-            // Display defeated monsters
             cout << "Defeated Monsters: ";
             if (defeatedMonsters.empty()) {
                 cout << "None";
@@ -119,15 +244,20 @@ int main() {
                 case 4: itemName = "Sword"; break;
                 case 5: itemName = "Staff"; break;
                 case 6: itemName = "Bow"; break;
-                case 7: itemName = (player.getType() == 1 ? "Battle Cry" :
-                                   player.getType() == 2 ? "Fireball" : "Power Shot"); break;
                 default: cout << "Invalid item number!\n"; continue;
             }
 
             shop.buyItem(player, inventory, itemName);
         }
         else if (choice == 4) {
+            // View game history
+            displayGameHistory(gameHistory);
+        }
+        else if (choice == 5) {
             cout << "Thanks for playing! See you next time.\n";
+            currentSession.result = "Quit";
+            currentSession.defeatedMonsters = joinMonsters(defeatedMonsters);
+            saveGameSession(currentSession);
             break; // Exit game loop
         }
         else {
