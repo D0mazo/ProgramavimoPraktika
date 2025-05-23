@@ -57,7 +57,7 @@ bool battle(Player& player, const std::string& monsterName) {
         else if (choice == 2) { // Run Away
             if (runChance(rng) == 0) {
                 std::cout << "You successfully escaped!\n";
-                return false; // Escape counts as a loss for win condition tracking
+                return false; // Escape ends the battle, not the game
             } else {
                 std::cout << "Escape failed! The " << monster.getName() << " attacks you!\n";
                 int monsterAttack = monster.attack();

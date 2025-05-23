@@ -4,7 +4,9 @@
 #include <set>
 #include <vector>
 #include <fstream>
+#include <iomanip>
 #include <sstream>
+#include <algorithm> // Added for trim
 #include "menu.h"
 #include "Player/player.h"
 #include "Battle/battle.h"
@@ -21,6 +23,7 @@ struct GameSession {
     string difficulty;
     string result;
     string defeatedMonsters;
+    int pointsEarned;
 };
 
 // Function to convert player type to string
@@ -43,6 +46,13 @@ string getDifficultyString(int difficulty) {
     }
 }
 
+// Helper function to trim whitespace
+string trim(const string& str) {
+    string result = str;
+    result.erase(remove_if(result.begin(), result.end(), ::isspace), result.end());
+    return result;
+}
+
 // Function to join defeated monsters into a string
 string joinMonsters(const set<string>& monsters) {
     if (monsters.empty()) return "None";
@@ -58,7 +68,7 @@ string joinMonsters(const set<string>& monsters) {
 vector<GameSession> loadGameHistory() {
     vector<GameSession> history;
     ifstream file("game_history.csv");
-    if (!file.is_open()) return history; // Return empty vector if file doesn't exist
+    if (!file.is_open()) return history;
 
     string line;
     getline(file, line); // Skip header
@@ -69,10 +79,24 @@ vector<GameSession> loadGameHistory() {
         getline(ss, session.playerType, ',');
         getline(ss, session.difficulty, ',');
         getline(ss, session.result, ',');
-
         getline(ss, session.defeatedMonsters, ',');
+        string pointsStr;
+        getline(ss, pointsStr, ',');
+
+        pointsStr = trim(pointsStr);
+        if (!pointsStr.empty() && pointsStr.back() == '\r') {
+            pointsStr.pop_back(); // Handle Windows line endings
+        }
+
+        try {
+            session.pointsEarned = pointsStr.empty() ? 0 : stoi(pointsStr);
+        } catch (const invalid_argument& e) {
+            session.pointsEarned = 0;
+        }
+
         history.push_back(session);
     }
+
     file.close();
     return history;
 }
@@ -84,15 +108,15 @@ void saveGameSession(const GameSession& session) {
         cout << "Error: Could not open game_history.csv for writing.\n";
         return;
     }
-    // Write header if file is empty
     if (file.tellp() == 0) {
-        file << "PlayerName,PlayerType,Difficulty,Result,DefeatedMonsters\n";
+        file << "PlayerName,PlayerType,Difficulty,Result,DefeatedMonsters,PointsEarned\n";
     }
     file << session.playerName << ","
          << session.playerType << ","
          << session.difficulty << ","
          << session.result << ","
-         << session.defeatedMonsters << "\n";
+         << session.defeatedMonsters << ","
+         << session.pointsEarned << "\n";
     file.close();
 }
 
@@ -102,23 +126,50 @@ void displayGameHistory(const vector<GameSession>& history) {
         cout << "No game history available.\n";
         return;
     }
+
+    const int nameWidth = 15;
+    const int typeWidth = 12;
+    const int diffWidth = 10;
+    const int resultWidth = 8;
+    const int monstersWidth = 20;
+    const int pointsWidth = 12;
+
     cout << "\n====== GAME HISTORY ======\n";
-    cout << "Player Name | Player Type | Difficulty | Result | Defeated Monsters\n";
-    cout << "------------|-------------|------------|--------|------------------\n";
+    cout << left
+         << setw(nameWidth) << "Player Name" << " | "
+         << setw(typeWidth) << "Player Type" << " | "
+         << setw(diffWidth) << "Difficulty" << " | "
+         << setw(resultWidth) << "Result" << " | "
+         << setw(monstersWidth) << "Defeated Monsters" << " | "
+         << setw(pointsWidth) << "Points Earned" << "\n";
+    cout << string(nameWidth, '-') << "-+-"
+         << string(typeWidth, '-') << "-+-"
+         << string(diffWidth, '-') << "-+-"
+         << string(resultWidth, '-') << "-+-"
+         << string(monstersWidth, '-') << "-+-"
+         << string(pointsWidth, '-') << "\n";
+
     for (const auto& session : history) {
-        cout << session.playerName << " | "
-             << session.playerType << " | "
-             << session.difficulty << " | "
-             << session.result << " | "
-             << session.defeatedMonsters << "\n";
+        string playerName = session.playerName.length() > nameWidth - 2
+            ? session.playerName.substr(0, nameWidth - 5) + "..."
+            : session.playerName;
+        string defeatedMonsters = session.defeatedMonsters.length() > monstersWidth - 2
+            ? session.defeatedMonsters.substr(0, monstersWidth - 5) + "..."
+            : session.defeatedMonsters;
+
+        cout << left
+             << setw(nameWidth) << playerName << " | "
+             << setw(typeWidth) << session.playerType << " | "
+             << setw(diffWidth) << session.difficulty << " | "
+             << setw(resultWidth) << session.result << " | "
+             << setw(monstersWidth) << defeatedMonsters << " | "
+             << setw(pointsWidth) << session.pointsEarned << "\n";
     }
 }
 
 int main() {
-    // Seed RNG once at program start
     srand(static_cast<unsigned>(time(nullptr)));
 
-    // Load game history
     vector<GameSession> gameHistory = loadGameHistory();
     if (!gameHistory.empty()) {
         cout << "\nPrevious Game Sessions:\n";
@@ -126,13 +177,11 @@ int main() {
         cout << "\n";
     }
 
-    // Show the menu and let the player choose a character
     MenuChoices choices = menu();
     Player player(choices.playerType);
     Inventory inventory;
     Shop shop;
 
-    // Track defeated monsters
     set<string> defeatedMonsters;
 
     cout << "Welcome, warrior! Here are your stats:\n";
@@ -142,16 +191,13 @@ int main() {
     cout << "Gold: " << player.getGold() << endl;
     cout << "Points: " << player.getPoints() << endl;
 
-    // Initialize game session
     GameSession currentSession;
     currentSession.playerName = choices.playerName;
     currentSession.playerType = getPlayerTypeString(choices.playerType);
     currentSession.difficulty = getDifficultyString(choices.difficulty);
-    currentSession.result = "Quit"; // Default result
+    currentSession.result = "Quit";
 
-    // Main game loop
     while (true) {
-        // Check win condition for all difficulty levels
         vector<string> levelMonsters = getMonstersByDifficulty(choices.difficulty);
         bool allDefeated = true;
         for (const auto& monster : levelMonsters) {
@@ -160,6 +206,7 @@ int main() {
                 break;
             }
         }
+
         if (allDefeated) {
             cout << "\nCongratulations, " << choices.playerName << "! You have defeated all "
                  << currentSession.difficulty << " mode monsters ("
@@ -168,8 +215,9 @@ int main() {
             cout << "You win the game!\n";
             currentSession.result = "Win";
             currentSession.defeatedMonsters = joinMonsters(defeatedMonsters);
+            currentSession.pointsEarned = player.getPoints();
             saveGameSession(currentSession);
-            break; // Exit game loop
+            break;
         }
 
         cout << "\n====== MAIN MENU ======\n";
@@ -184,27 +232,26 @@ int main() {
         cin >> choice;
 
         if (choice == 1) {
-            // Select a random monster for the chosen difficulty
             static mt19937 rng(static_cast<unsigned>(time(nullptr)));
             vector<string> validMonsters = getMonstersByDifficulty(choices.difficulty);
             uniform_int_distribution<int> dist(0, validMonsters.size() - 1);
             string selectedMonster = validMonsters[dist(rng)];
 
             cout << "\nYou are now facing a " << selectedMonster << "!\n";
-            bool wonBattle = battle(player, selectedMonster); // Start a fight
+            bool wonBattle = battle(player, selectedMonster);
 
             if (wonBattle) {
-                defeatedMonsters.insert(selectedMonster); // Track defeated monster
+                defeatedMonsters.insert(selectedMonster);
                 cout << "You defeated the " << selectedMonster << "!\n";
             } else {
                 cout << "You were defeated by the " << selectedMonster << ". Game Over!\n";
                 currentSession.result = "Loss";
                 currentSession.defeatedMonsters = joinMonsters(defeatedMonsters);
+                currentSession.pointsEarned = player.getPoints();
                 saveGameSession(currentSession);
-                break; // Exit game loop on player defeat
+                break;
             }
-        }
-        else if (choice == 2) {
+        } else if (choice == 2) {
             cout << "\nPlayer Stats:\n";
             cout << "Health: " << player.getHealth() << endl;
             cout << "Power: " << player.getPower() << endl;
@@ -212,17 +259,10 @@ int main() {
             cout << "Gold: " << player.getGold() << endl;
             cout << "Points: " << player.getPoints() << endl;
             cout << "Defeated Monsters: ";
-            if (defeatedMonsters.empty()) {
-                cout << "None";
-            } else {
-                for (const auto& monster : defeatedMonsters) {
-                    cout << monster << " ";
-                }
-            }
+            if (defeatedMonsters.empty()) cout << "None";
+            else for (const auto& monster : defeatedMonsters) cout << monster << " ";
             cout << endl;
-        }
-        else if (choice == 3) {
-            // Shop menu
+        } else if (choice == 3) {
             shop.displayItems();
             cout << "Your Gold: " << player.getGold() << endl;
             cout << "Enter the item number to buy (or 0 to exit): ";
@@ -235,7 +275,6 @@ int main() {
                 continue;
             }
 
-            // Map item choice to item name
             string itemName;
             switch (itemChoice) {
                 case 1: itemName = "Health Potion"; break;
@@ -248,19 +287,16 @@ int main() {
             }
 
             shop.buyItem(player, inventory, itemName);
-        }
-        else if (choice == 4) {
-            // View game history
+        } else if (choice == 4) {
             displayGameHistory(gameHistory);
-        }
-        else if (choice == 5) {
+        } else if (choice == 5) {
             cout << "Thanks for playing! See you next time.\n";
             currentSession.result = "Quit";
             currentSession.defeatedMonsters = joinMonsters(defeatedMonsters);
+            currentSession.pointsEarned = player.getPoints();
             saveGameSession(currentSession);
-            break; // Exit game loop
-        }
-        else {
+            break;
+        } else {
             cout << "Invalid choice! Try again.\n";
         }
     }
