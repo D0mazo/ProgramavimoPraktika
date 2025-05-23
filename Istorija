@@ -1,0 +1,60 @@
+🎮 Žaidimo Pasaulio Istorija – Tamsos Grėsmė
+🌍 Pasaulio fonas
+Seniai seniai, Eldaros pasaulyje, balansas tarp šviesos ir tamsos buvo pažeistas. Tamsos būtybės – goblinai, orkai, vilkai ir skeletai – pradėjo plisti iš prakeiktų griuvėsių ir apleistų miškų. Gyventojai ėmė slėptis, o miestai virto tvirtovėmis. Tik vienas kelias liko pasaulio išgelbėjimui – drąsių herojų kelionė.
+
+🧙‍♂️ Žaidimo eiga
+Žaidėjas įsikūnija į vieną iš klasių:
+
+Karys – stiprus ir ištvermingas.
+
+Magas – galingas, bet pažeidžiamas.
+
+Lankininkas – greitas ir taiklus.
+
+Jis pasirenka sudėtingumo lygį:
+
+Lengvas – priešai silpnesni.
+
+Vidutinis – subalansuotas iššūkis.
+
+Sunkus – kiekvienas žingsnis gali būti paskutinis.
+
+⚔️ Kova
+Kiekvienoje sesijoje žaidėjas kovoja su atsitiktinai parinktais monstrais:
+
+Goblinai, vilkai, orkai, skeletai ir gleivės.
+
+Žaidimo iššūkis – išgyventi prieš bangą priešų, kol baigiasi žaidimo laikas arba žaidėjas pasitraukia ar žūsta.
+
+🏁 Rezultatai
+Po kiekvienos žaidimo sesijos rezultatai yra:
+
+Rezultatas: Laimėta, Pralaimėta arba Pasitraukta.
+
+Taškai: Kiek laiko išgyventa žaidime (sekundėmis).
+
+Priešai: Su kuriais teko susidurti.
+
+Visa tai įrašoma į game_history.csv, kur saugoma žaidėjų istorija.
+
+📊 Žaidimo istorijos peržiūra
+Žaidėjas gali pasirinkti peržiūrėti istoriją – žaidimo sesijų sąrašas atvaizduojamas su visomis detalėmis:
+
+Vardas, klasė, lygis, rezultatas, priešai, trukmė.
+
+🔁 Pasirinkimų ciklas
+Žaidimo ciklas:
+
+Įvesti vardą.
+
+Pasirinkti klasę.
+
+Pasirinkti lygį.
+
+Simuliuoti kovą su atsitiktiniais monstrais.
+
+Gauti rezultatą.
+
+Įrašyti jį į istoriją.
+
+Galimybė peržiūrėti istoriją arba pradėti naują žaidimą.
