@@ -4,7 +4,8 @@
 #include <random>
 #include <ctime>
 
-bool battle(Player& player, const std::string& monsterName) {
+// Return values: 1 = win, 0 = loss, 2 = escape
+int battle(Player& player, const std::string& monsterName) {
     // Create the monster using the provided monsterName
     Monster monster = createMonster(monsterName);
     std::cout << "A wild " << monster.getName() << " appears!\n";
@@ -41,7 +42,7 @@ bool battle(Player& player, const std::string& monsterName) {
                 player.addGold(goldReward);
                 player.addPoints(pointReward);
                 std::cout << "You earned " << goldReward << " gold and " << pointReward << " points!\n";
-                return true; // Player wins
+                return 1; // Player wins, monster defeated
             }
 
             // Monster's turn to attack
@@ -51,20 +52,20 @@ bool battle(Player& player, const std::string& monsterName) {
 
             if (player.getHealth() <= 0) {
                 std::cout << "You have been defeated...\n";
-                return false; // Player loses
+                return 0; // Player loses
             }
         }
         else if (choice == 2) { // Run Away
             if (runChance(rng) == 0) {
-                std::cout << "You successfully escaped!\n";
-                return true;
+                std::cout << "You successfully escaped from the " << monster.getName() << "!\n";
+                return 2; 
             } else {
                 std::cout << "Escape failed! The " << monster.getName() << " attacks you!\n";
                 int monsterAttack = monster.attack();
                 player.takeDamage(monsterAttack);
                 if (player.getHealth() <= 0) {
                     std::cout << "You have been defeated...\n";
-                    return false; // Player loses
+                    return 0; // Player loses
                 }
             }
         }
@@ -75,12 +76,12 @@ bool battle(Player& player, const std::string& monsterName) {
         }
         else if (choice == 4) { // Quit Battle
             std::cout << "You forfeited the battle.\n";
-            return false; // Forfeit counts as a loss for win condition tracking
+            return 0; // Forfeit counts as a loss
         }
         else {
             std::cout << "Invalid choice! Try again.\n";
         }
     }
 
-    return true; // Fallback (should not reach here)
+    return 1; // Fallback (should not reach here due to loop conditions)
 }
