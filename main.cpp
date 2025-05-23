@@ -64,6 +64,15 @@ string joinMonsters(const set<string>& monsters) {
     return result;
 }
 
+// Function to validate a GameSession
+bool isValidSession(const GameSession& session) {
+    // Check if critical fields are non-default and non-empty
+    return !session.playerName.empty() && session.playerName != "PlayerName" &&
+           !session.playerType.empty() && session.playerType != "PlayerType" &&
+           !session.difficulty.empty() && session.difficulty != "Difficulty" &&
+           !session.result.empty() && session.result != "Result";
+}
+
 // Function to load game history from CSV
 vector<GameSession> loadGameHistory() {
     vector<GameSession> history;
@@ -94,7 +103,10 @@ vector<GameSession> loadGameHistory() {
             session.pointsEarned = 0;
         }
 
-        history.push_back(session);
+        // Only add valid sessions to the history
+        if (isValidSession(session)) {
+            history.push_back(session);
+        }
     }
 
     file.close();
@@ -103,21 +115,60 @@ vector<GameSession> loadGameHistory() {
 
 // Function to save game session to CSV
 void saveGameSession(const GameSession& session) {
+    // Only save valid sessions
+    if (!isValidSession(session)) {
+        cout << "Warning: Attempted to save an invalid game session. Skipping.\n";
+        return;
+    }
+
     ofstream file("game_history.csv", ios::app);
     if (!file.is_open()) {
         cout << "Error: Could not open game_history.csv for writing.\n";
         return;
     }
+
+    // Write header if file is empty
     if (file.tellp() == 0) {
         file << "PlayerName,PlayerType,Difficulty,Result,DefeatedMonsters,PointsEarned\n";
     }
+
+    // Write session data
     file << session.playerName << ","
          << session.playerType << ","
          << session.difficulty << ","
          << session.result << ","
          << session.defeatedMonsters << ","
          << session.pointsEarned << "\n";
+
     file.close();
+}
+
+// Function to clean the CSV file by rewriting only valid entries
+void cleanGameHistoryFile() {
+    vector<GameSession> history = loadGameHistory();
+    ofstream file("game_history.csv", ios::trunc); // Overwrite file
+    if (!file.is_open()) {
+        cout << "Error: Could not open game_history.csv for writing.\n";
+        return;
+    }
+
+    // Write header
+    file << "PlayerName,PlayerType,Difficulty,Result,DefeatedMonsters,PointsEarned\n";
+
+    // Write only valid sessions
+    for (const auto& session : history) {
+        if (isValidSession(session)) {
+            file << session.playerName << ","
+                 << session.playerType << ","
+                 << session.difficulty << ","
+                 << session.result << ","
+                 << session.defeatedMonsters << ","
+                 << session.pointsEarned << "\n";
+        }
+    }
+
+    file.close();
+    cout << "Game history file cleaned successfully.\n";
 }
 
 // Function to display game history
@@ -170,6 +221,10 @@ void displayGameHistory(const vector<GameSession>& history) {
 int main() {
     srand(static_cast<unsigned>(time(nullptr)));
 
+    // Clean the CSV file to remove invalid entries
+    cleanGameHistoryFile();
+
+    // Load the cleaned game history
     vector<GameSession> gameHistory = loadGameHistory();
     if (!gameHistory.empty()) {
         cout << "\nPrevious Game Sessions:\n";
