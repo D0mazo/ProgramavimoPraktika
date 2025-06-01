@@ -46,6 +46,7 @@ string getDifficultyString(int difficulty) {
     }
 }
 
+
 // Helper function to trim whitespace
 string trim(const string& str) {
     string result = str;
